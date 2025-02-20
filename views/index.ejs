@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapsible Binary Tree</title>
+    <style>
+        /* Centering */
+        #tree-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Tree Styling */
+        .tree {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            display: none;  /* Initially hidden */
+            justify-content: center;
+        }
+
+        .tree li {
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            text-align: center;
+        }
+
+        /* Curved connecting lines */
+        .tree li::before, .tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 50%;
+            border-top: 2px solid black;
+            height: 20px;
+            border-radius: 10px;
+        }
+
+        .tree li::before {
+            left: 50%;
+            border-right: 2px solid black;
+        }
+
+        .tree li::after {
+            right: 50%;
+            border-left: 2px solid black;
+        }
+
+        .tree li:only-child::before, .tree li:only-child::after {
+            display: none;
+        }
+
+        .tree li:first-child::before, .tree li:last-child::after {
+            border: 0;
+        }
+
+        /* Node Styling */
+        .tree li div {
+            display: inline-block;
+            padding: 12px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            font-weight: bold;
+            border: 2px solid black;
+            min-width: 120px;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;  /* Clickable */
+        }
+
+        /* Hover Effect */
+        .tree li div:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+
+        /* Styling for Name & ID */
+        .tree li div span {
+            display: block;
+            font-size: 14px;
+            margin-top: 5px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        /* Show children when expanded */
+        .expanded > ul {
+            display: flex !important;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Collapsible User Referral Binary Tree</h2>
+    <div id="tree-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const treeData = <%- JSON.stringify(users) %>; // Get data from backend
+            
+            console.log("Tree Data:", treeData); // Debugging
+
+            function createTreeNode(user) {
+                if (!user) return "";
+
+                return `
+                    <li>
+                        <div onclick="toggleChildren(this)">
+                            ${user.name} 
+                            <span>(${user.id})</span>
+                        </div>
+                        <ul>
+                            ${user.left ? createTreeNode(user.left) : ""}
+                            ${user.right ? createTreeNode(user.right) : ""}
+                        </ul>
+                    </li>
+                `;
+            }
+
+            // Generate tree structure from root user
+            const treeHTML = `<ul class="tree expanded">${createTreeNode(treeData)}</ul>`;
+            document.getElementById("tree-container").innerHTML = treeHTML;
+
+            // Expand/collapse function
+            window.toggleChildren = function (element) {
+                const parentLi = element.parentElement;
+                parentLi.classList.toggle("expanded");
+            };
+        });
+    </script>
+</body>
+</html>

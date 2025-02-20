@@ -1,9 +1,14 @@
 //  Function to find the next available position in the tree
+const { compareSync } = require('bcrypt');
+const User = require('../models/User');
+
 const findNextAvailableNode = async (parentNode) => {
     let queue = [parentNode];
+    console.log("Queue:", queue);
 
     while (queue.length > 0) {
         let current = queue.shift();
+
 
         // Check left position first
         if (!current.left) return { parent: current, nodeType: 'left' };

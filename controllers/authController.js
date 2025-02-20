@@ -150,8 +150,6 @@ const referUser = async (req, res) => {
     }
 };
 
-
-
 module.exports = {
     registerUser,
     referUser

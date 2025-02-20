@@ -61,7 +61,6 @@ const registerUser = async (req, res) => {
 };
 
 const referUser = async (req, res) => {
-
     try {
         const { referrerId, name, mobile, password } = req.body;
 
@@ -107,9 +106,11 @@ const referUser = async (req, res) => {
             parent.right = newUser._id;
         }
           // Push new user's ID into referrer's `referedUsers` array
-          parent.referedUsers.push(newUser._id);
+        //   parent.referedUsers.push(newUser._id);
+          referrer.referedUsers.push(newUser._id);
 
         await parent.save();
+        await referrer.save();
 
         res.status(201).json({
             message: "User referred successfully",
